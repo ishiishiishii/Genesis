@@ -80,6 +80,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgles2 \
     libglvnd0 \
     libglx0 \
+    nano \
+    vim \
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
