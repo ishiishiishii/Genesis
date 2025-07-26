@@ -51,7 +51,7 @@ def main():
 
     env.cam.start_recording()
     with torch.no_grad():
-        for i in range(600):
+        for i in range(240):
             actions = policy(obs)
             obs, rews, dones, infos = env.step(actions)
             env.cam.render()
