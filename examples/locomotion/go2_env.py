@@ -66,7 +66,7 @@ class Go2Env:
         # add camera
         self.cam = self.scene.add_camera(
                  res    = (1280, 960),
-                 pos    = (3.5, 0.0, 10.5),
+                 pos    = (7.5, 0.0, 3.0),
                  lookat = (0, 0, 0.5),
                  fov    = 30,
                  GUI    = False
