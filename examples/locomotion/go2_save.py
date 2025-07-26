@@ -18,7 +18,7 @@ from rsl_rl.runners import OnPolicyRunner
 
 import genesis as gs
 
-from go2_saveenv import Go2Env
+from go2_env import Go2Env
 
 
 def main():
@@ -56,7 +56,7 @@ def main():
             obs, rews, dones, infos = env.step(actions)
             env.cam.render()
 
-    env.cam.stop_recording(save_to_filename="test.mp4",fps=60)
+    env.cam.stop_recording(save_to_filename="test.mp4",fps=30)
 
 if __name__ == "__main__":
     main()
