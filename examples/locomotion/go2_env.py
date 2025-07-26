@@ -57,10 +57,19 @@ class Go2Env:
         self.inv_base_init_quat = inv_quat(self.base_init_quat)
         self.robot = self.scene.add_entity(
             gs.morphs.URDF(
-                file="/workspace/Genesis/genesis/assets/urdf/go2/urdf/go2_heavy.urdf",
+                file="/workspace/Genesis/genesis/assets/urdf/go2/urdf/go2_light.urdf",
                 pos=self.base_init_pos.cpu().numpy(),
                 quat=self.base_init_quat.cpu().numpy(),
             ),
+        )
+
+        # add camera
+        self.cam = self.scene.add_camera(
+                 res    = (1280, 960),
+                 pos    = (3.5, 0.0, 10.5),
+                 lookat = (0, 0, 0.5),
+                 fov    = 30,
+                 GUI    = False
         )
 
         # build
