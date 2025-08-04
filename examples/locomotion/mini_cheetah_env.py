@@ -57,7 +57,7 @@ class MiniCheetahEnv:
         self.inv_base_init_quat = inv_quat(self.base_init_quat)
         self.robot = self.scene.add_entity(
             gs.morphs.URDF(
-                file="/workspace/Genesis/genesis/assets/urdf/mini_cheetah_urdf/urdf/mini_cheetah.urdf",
+                file="/workspace/Genesis/genesis/assets/urdf/mini_cheetah/urdf/mini_cheetah.urdf",
                 pos=self.base_init_pos.cpu().numpy(),
                 quat=self.base_init_quat.cpu().numpy(),
             ),
