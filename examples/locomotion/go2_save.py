@@ -56,7 +56,7 @@ def main():
             obs, rews, dones, infos = env.step(actions)
             env.cam.render()
 
-    env.cam.stop_recording(save_to_filename="test.mp4",fps=30)
+    env.cam.stop_recording(save_to_filename="finetuning_base15_model_10.mp4",fps=30)
 
 if __name__ == "__main__":
     main()
