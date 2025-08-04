@@ -57,7 +57,7 @@ class Go2Env:
         self.inv_base_init_quat = inv_quat(self.base_init_quat)
         self.robot = self.scene.add_entity(
             gs.morphs.URDF(
-                file="/workspace/Genesis/genesis/assets/urdf/go2/urdf/go2_light.urdf",
+                file="/workspace/Genesis/genesis/assets/urdf/go2/urdf/go2.urdf",
                 pos=self.base_init_pos.cpu().numpy(),
                 quat=self.base_init_quat.cpu().numpy(),
             ),
