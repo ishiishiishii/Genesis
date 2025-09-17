@@ -453,12 +453,12 @@ if __name__ == "__main__":
 
 """
 # 簡易定量的評価の実行例
-python examples/locomotion/simple_quantitative_eval.py -e go2-walking --ckpt 100 --num_episodes 10 --num_seeds 5
+python examples/locomotion/simple_quantitative_eval.py -e go2-walking --ckpt 100 --num_episodes 10 --episode_length 300 --num_seeds 5
 
 # Go2の評価
 python examples/locomotion/simple_quantitative_eval.py -e go2-walking --ckpt 100 --robot_name Go2
 
-例  python examples/locomotion/simple_quantitative_eval.py -e minicheetah_to_go2_finetuning --ckpt 119 --num_episodes 5 --num_seeds 3 --episode_length 300 --no_viewer --robot_name Go2
+例  python examples/locomotion/simple_quantitative_eval.py -e minicheetah_to_go2_finetuning --ckpt 120 --num_episodes 5 --num_seeds 5 --episode_length 300 --no_viewer --robot_name Go2
 
 # Minicheetahの評価（環境設定を変更する必要があります）
 python examples/locomotion/simple_quantitative_eval.py -e minicheetah-walking --ckpt 100 --robot_name Minicheetah
