@@ -324,9 +324,11 @@ def main():
                         default="go2", help="Robot type to train")
     parser.add_argument("-B", "--num_envs", type=int, default=4096)
     parser.add_argument("--max_iterations", type=int, default=101)
+    parser.add_argument("--pretrained_path", type=str, default=None,
+                        help="Path to pretrained model for fine-tuning")
     args = parser.parse_args()
 
-    gs.init(logging_level="warning",precision="64") #precision="64"を加えた
+    gs.init(logging_level="warning")
 
     log_dir = f"logs/{args.exp_name}"
     # ロボットタイプに応じて設定関数を選択
@@ -366,6 +368,15 @@ def main():
         raise ValueError(f"Unknown robot type: {args.robot_type}")
 
     runner = OnPolicyRunner(env, train_cfg, log_dir, device=gs.device)
+    
+    # ファインチューニングの判定とモデル読み込み
+    if args.pretrained_path:
+        if os.path.exists(args.pretrained_path):
+            print(f"Fine-tuning mode: Loading pretrained model from {args.pretrained_path}")
+            runner.load(args.pretrained_path)
+        else:
+            print(f"Warning: Pretrained model not found at {args.pretrained_path}")
+            print("Starting training from scratch...")
 
     runner.learn(num_learning_iterations=args.max_iterations, init_at_random_ep_len=True)
 
@@ -374,6 +385,12 @@ if __name__ == "__main__":
     main()
 
 """
-# training
-python examples/locomotion/train.py -e go2-walking -r go2  --max_iterations 101
+# 通常の学習
+python examples/locomotion/train.py -e go2-walking -r go2 --max_iterations 101
+
+# ファインチューニング
+python examples/locomotion/train.py -e go2-finetuning -r go2 --pretrained_path logs/go2-walking/model_100.pt --max_iterations 21
+
+# 異なるロボット間でのファインチューニング
+python examples/locomotion/train.py -e minicheetah-to-go2 -r go2 --pretrained_path logs/minicheetah-walking/model_100.pt --max_iterations 31
 """
