@@ -59,8 +59,8 @@ if __name__ == "__main__":
 
 """
 # evaluation
-python examples/locomotion/go2_eval.py -e go2-walking -v --ckpt 100
+python examples/locomotion/go2_eval.py -e mini_cheetah-walking --ckpt 100
 
 # finetuning
-python examples/locomotion/go2_eval.py -e go2-finetuning --ckpt 110
+python examples/locomotion/go2_eval.py -e mini_cheetah-finetuning --ckpt 110
 """

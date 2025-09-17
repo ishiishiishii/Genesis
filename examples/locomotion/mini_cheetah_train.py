@@ -24,13 +24,13 @@ def get_train_cfg(exp_name, max_iterations):
     train_cfg_dict = {
         "algorithm": {
             "class_name": "PPO",
-            "clip_param": 0.2,
+            "clip_param": 0.2, #0.2から変えた
             "desired_kl": 0.01,
             "entropy_coef": 0.01,
             "gamma": 0.99,
             "lam": 0.95,
-            "learning_rate": 0.001,
-            "max_grad_norm": 1.0,
+            "learning_rate": 0.001, #0.001から変えた
+            "max_grad_norm": 1.0, #1.0から変えた
             "num_learning_epochs": 5,
             "num_mini_batches": 4,
             "schedule": "adaptive",
@@ -42,7 +42,7 @@ def get_train_cfg(exp_name, max_iterations):
             "activation": "elu",
             "actor_hidden_dims": [512, 256, 128],
             "critic_hidden_dims": [512, 256, 128],
-            "init_noise_std": 1.0,
+            "init_noise_std": 1.0, #1.0から変えた
             "class_name": "ActorCritic",
         },
         "runner": {
@@ -105,7 +105,7 @@ def get_cfgs():
         "termination_if_roll_greater_than": 10,  # degree
         "termination_if_pitch_greater_than": 10,
         # base pose
-        "base_init_pos": [0.0, 0.0, 0.42],
+        "base_init_pos": [0.0, 0.0, 0.45], #0.45から変えた
         "base_init_quat": [1.0, 0.0, 0.0, 0.0],
         "episode_length_s": 20.0,
         "resampling_time_s": 4.0,
@@ -124,8 +124,8 @@ def get_cfgs():
     }
     reward_cfg = {
         "tracking_sigma": 0.25,
-        "base_height_target": 0.3,
-        "feet_height_target": 0.075,
+        "base_height_target": 0.3, #0.3から変えた
+        "feet_height_target": 0.075, #0.075から変えた
         "reward_scales": {
             "tracking_lin_vel": 1.0,
             "tracking_ang_vel": 0.2,
@@ -152,7 +152,7 @@ def main():
     parser.add_argument("--max_iterations", type=int, default=101)
     args = parser.parse_args()
 
-    gs.init(logging_level="warning")
+    gs.init(logging_level="warning",precision="64") #precision="64"を加えた
 
     log_dir = f"logs/{args.exp_name}"
     env_cfg, obs_cfg, reward_cfg, command_cfg = get_cfgs()
@@ -181,5 +181,10 @@ if __name__ == "__main__":
 
 """
 # training
-python examples/locomotion/go2_train.py
+python examples/locomotion/mini_cheetah_train.py -e mini_cheetah-walking
+
+changeparams:
+"base_init_pos": [0.0, 0.0, 0.4], #0.45から変えた
+base_height_targetを0.3から0.28に小さくした
+feet_height_target: 0.065, #0.075から変えた このときはエラーが出なかった
 """
