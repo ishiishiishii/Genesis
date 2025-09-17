@@ -56,12 +56,17 @@ def main():
             obs, rews, dones, infos = env.step(actions)
             env.cam.render()
 
-    env.cam.stop_recording(save_to_filename="finetuning_base15_model_10.mp4",fps=30)
+    env.cam.stop_recording(save_to_filename="minicheetah_to_go2_randomized_09_finetuning.mp4",fps=30) #ここを変更していく
 
 if __name__ == "__main__":
     main()
 
 """
+#59行目を適宜変更
+
 # evaluation
-python examples/locomotion/go2_eval.py -e go2-walking -v --ckpt 100
+python examples/locomotion/go2_save.py -e go2-walking --ckpt 100
+
+#mp4の見方
+mpv go2-walking_model_100.mp4
 """
