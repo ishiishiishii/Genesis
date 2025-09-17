@@ -1,0 +1,91 @@
+import argparse
+import os
+import pickle
+from importlib import metadata
+
+import torch
+
+try:
+    try:
+        if metadata.version("rsl-rl"):
+            raise ImportError
+    except metadata.PackageNotFoundError:
+        if metadata.version("rsl-rl-lib") != "2.2.4":
+            raise ImportError
+except (metadata.PackageNotFoundError, ImportError) as e:
+    raise ImportError("Please uninstall 'rsl_rl' and install 'rsl-rl-lib==2.2.4'.") from e
+from rsl_rl.runners import OnPolicyRunner
+
+import genesis as gs
+
+from env import Go2Env
+from env import MiniCheetahEnv
+from env import LaikagoEnv
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-e", "--exp_name", type=str, default="go2-walking")
+    parser.add_argument("-r", "--robot_type", type=str, choices=["go2", "minicheetah", "laikago"], 
+                        default="go2", help="Robot type to train")
+    parser.add_argument("--ckpt", type=int, default=100)
+    args = parser.parse_args()
+
+    gs.init()
+
+    log_dir = f"logs/{args.exp_name}"
+    env_cfg, obs_cfg, reward_cfg, command_cfg, train_cfg = pickle.load(open(f"logs/{args.exp_name}/cfgs.pkl", "rb"))
+    reward_cfg["reward_scales"] = {}
+
+    if args.robot_type == "go2":
+        env = Go2Env(
+        num_envs=1,
+        env_cfg=env_cfg,
+        obs_cfg=obs_cfg,
+        reward_cfg=reward_cfg,
+        command_cfg=command_cfg,
+        show_viewer=True,
+    )
+    elif args.robot_type == "minicheetah":
+        env = MiniCheetahEnv(
+            num_envs=1,
+            env_cfg=env_cfg,
+            obs_cfg=obs_cfg,
+            reward_cfg=reward_cfg,
+            command_cfg=command_cfg,
+            show_viewer=True,
+        )
+    elif args.robot_type == "laikago":
+        env = LaikagoEnv(
+            num_envs=1,
+            env_cfg=env_cfg,
+            obs_cfg=obs_cfg,
+            reward_cfg=reward_cfg,
+            command_cfg=command_cfg,
+            show_viewer=True,
+        )
+    else:
+        raise ValueError(f"Unknown robot type: {args.robot_type}")
+
+    runner = OnPolicyRunner(env, train_cfg, log_dir, device=gs.device)
+    resume_path = os.path.join(log_dir, f"model_{args.ckpt}.pt")
+    runner.load(resume_path)
+    policy = runner.get_inference_policy(device=gs.device)
+
+    obs, _ = env.reset()
+    with torch.no_grad():
+        while True:
+            actions = policy(obs)
+            obs, rews, dones, infos = env.step(actions)
+
+
+if __name__ == "__main__":
+    main()
+
+"""
+# evaluation
+python examples/locomotion/eval.py -e go2-walking -r go2 -v --ckpt 100
+
+# finetuning
+python examples/locomotion/eval.py -e go2-finetuning -r go2 --ckpt 110
+"""
